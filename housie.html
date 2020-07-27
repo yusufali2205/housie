@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Tambola Number Drawer</title>
+
+	<style>
+		td, .number {
+			border: 1px solid;
+			padding: 20px;
+		}
+
+		.drawn {
+			background: lightgray;
+			border: 1px solid;
+			color: green;
+		}
+
+		.hidden {
+			display: none;
+		}
+	</style>
+</head>
+<body>
+
+<div id="create-new-game-widget" class="">
+	<form id="create-new-game-form" onsubmit="return createNewGame()">
+		<input type="text" id="new-game-name" name="" required="true" placeholder="Name of the Game!">
+		<input type="submit" value="Create new Game!">
+	</form>
+
+	<div id="previous-games-list">
+		<h2>Previous Games</h2>
+
+
+	</div>
+</div>
+
+<div id="game-window" class="hidden">
+	<h1 id="game-name"></h1>
+	<button onclick="draw()">Draw!!!</button>
+	
+	<table style="border: 1px; margin: 1px;">
+		<tbody>
+		<tr>
+			<td id="num-1">1</td>
+			<td id="num-2">2</td>
+			<td id="num-3">3</td>
+			<td id="num-4">4</td>
+			<td id="num-5">5</td>
+			<td id="num-6">6</td>
+			<td id="num-7">7</td>
+			<td id="num-8">8</td>
+			<td id="num-9">9</td>
+			<td id="num-10">10</td>
+		</tr>
+		<tr>
+			<td id="num-11">11</td>
+			<td id="num-12">12</td>
+			<td id="num-13">13</td>
+			<td id="num-14">14</td>
+			<td id="num-15">15</td>
+			<td id="num-16">16</td>
+			<td id="num-17">17</td>
+			<td id="num-18">18</td>
+			<td id="num-19">19</td>
+			<td id="num-20">20</td>
+		</tr>
+		<tr>
+			<td id="num-21">21</td>
+			<td id="num-22">22</td>
+			<td id="num-23">23</td>
+			<td id="num-24">24</td>
+			<td id="num-25">25</td>
+			<td id="num-26">26</td>
+			<td id="num-27">27</td>
+			<td id="num-28">28</td>
+			<td id="num-29">29</td>
+			<td id="num-30">30</td>
+		</tr>
+		<tr>
+			<td id="num-31">31</td>
+			<td id="num-32">32</td>
+			<td id="num-33">33</td>
+			<td id="num-34">34</td>
+			<td id="num-35">35</td>
+			<td id="num-36">36</td>
+			<td id="num-37">37</td>
+			<td id="num-38">38</td>
+			<td id="num-39">39</td>
+			<td id="num-40">40</td>
+		</tr>
+		<tr>
+			<td id="num-41">41</td>
+			<td id="num-42">42</td>
+			<td id="num-43">43</td>
+			<td id="num-44">44</td>
+			<td id="num-45">45</td>
+			<td id="num-46">46</td>
+			<td id="num-47">47</td>
+			<td id="num-48">48</td>
+			<td id="num-49">49</td>
+			<td id="num-50">50</td>
+		</tr>
+		<tr>
+			<td id="num-51">51</td>
+			<td id="num-52">52</td>
+			<td id="num-53">53</td>
+			<td id="num-54">54</td>
+			<td id="num-55">55</td>
+			<td id="num-56">56</td>
+			<td id="num-57">57</td>
+			<td id="num-58">58</td>
+			<td id="num-59">59</td>
+			<td id="num-60">60</td>
+		</tr>
+		<tr>
+			<td id="num-61">61</td>
+			<td id="num-62">62</td>
+			<td id="num-63">63</td>
+			<td id="num-64">64</td>
+			<td id="num-65">65</td>
+			<td id="num-66">66</td>
+			<td id="num-67">67</td>
+			<td id="num-68">68</td>
+			<td id="num-69">69</td>
+			<td id="num-70">70</td>
+		</tr>
+		<tr>
+			<td id="num-71">71</td>
+			<td id="num-72">72</td>
+			<td id="num-73">73</td>
+			<td id="num-74">74</td>
+			<td id="num-75">75</td>
+			<td id="num-76">76</td>
+			<td id="num-77">77</td>
+			<td id="num-78">78</td>
+			<td id="num-79">79</td>
+			<td id="num-80">80</td>
+
+		<tr>
+			<td id="num-81">81</td>
+			<td id="num-82">82</td>
+			<td id="num-83">83</td>
+			<td id="num-84">84</td>
+			<td id="num-85">85</td>
+			<td id="num-86">86</td>
+			<td id="num-87">87</td>
+			<td id="num-88">88</td>
+			<td id="num-89">89</td>
+			<td id="num-90">90</td>
+		</tr>
+
+		</tbody>
+	</table>
+
+	<br><br><br><br><br><br><br>
+	<p>
+		<span>Drawn: </span>
+		<span id="draw-sequence">
+			
+		</span>
+	</p>	
+</div>
+
+
+</body>
+<footer>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/random-js/1.0.8/random.min.js" integrity="sha512-C/21kASTZDv173aY5ERBPWuV9JVne9nhII/ZA7NIGhuPVCtGK5WnD6wzQ7dlQajXvu3003cojqouByxh+Fh3kg==" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/pouchdb@7.2.1/dist/pouchdb.min.js"></script>
+
+	<script>
+
+		class HousieGame {
+			constructor(id, name , drawn = []) {
+				this._id = id || Math.random().toString(36);
+				this.name = name;
+				this._engine = new Random();
+				this.drawn = drawn;
+
+				this._numbers = [];
+
+				for(var i =1 ; i <= 90; i++) {
+					if(!(i in this.drawn)) this._numbers.push(i);
+				}
+			}
+
+			draw() {
+				if(this._numbers.length == 0) throw "Error: Game is complete!!!"
+				
+				var picked = this._engine.pick(this._numbers);
+				this.drawn.push(picked);
+				this._numbers = this._numbers.filter(function (num) {
+					return num != picked;
+				});
+				return picked;
+			}
+
+			numbersDrawn() {
+				return this.drawn.length;
+			}
+
+			numbersLeft() {
+				return this._numbers.length;
+			}
+
+			toJSON() {
+				return {
+					_id: this._id,
+					name: this.name,
+					drawn: this.drawn
+				}
+			}
+		}
+
+		window.onload = function () {
+			var gameDB = new PouchDB("games")
+			window.gameDB = gameDB;
+			var previousList = document.getElementById("previous-games-list");
+
+			gameDB.allDocs().then(function(result) {
+				result.rows.forEach(function(row) {
+					gameDB.get(row.id).then(function(game) {
+						var p = document.createElement("p");
+						var a = document.createElement("a");
+						a.href = "#";
+						a.innerText = game.name;
+						a.setAttribute("data-id", game.id);
+						p.appendChild(a);
+						previousList.appendChild(p);
+
+						a.onclick = function() {
+							window.load(row.id);
+							return false;
+						}
+					});
+				});
+			});
+
+		}
+
+		function draw() {
+			try {
+				var picked = window.GAME.draw();
+				gameDB.get(window.GAME._id).then(function(game) {
+					game.drawn = window.GAME.drawn;
+					gameDB.put(game);
+				})
+			} catch(e) {
+				alert(e);
+			}
+			render(window.GAME)
+		}
+
+		function load(id) {
+			window.gameDB.allDocs().then(function(result) {
+				var gameDoc = result.rows.find((game) => id == game.id)
+
+				if(!gameDoc) return alert("NOT FOUND!");
+				window.gameDB.get(gameDoc.id).then(function(game) {
+					window.GAME = new HousieGame(gameDoc.id, game.name, game.drawn);
+					render(window.GAME);
+					showGameWindow();
+				});
+			});
+		}
+
+		function render(game) {
+			document.getElementById("game-name").innerText = game.name;
+			var drawSequence = document.getElementById("draw-sequence");
+			drawSequence.innerHTML = "";
+			game.drawn.forEach(function(num) {
+				document.getElementById("num-" + num).className = "drawn";
+				var historyElement = document.createElement("span");
+				historyElement.innerText = num + ", "
+				drawSequence.appendChild(historyElement);
+			});
+		}
+
+		function createNewGame() {
+			try {
+				var textField = document.getElementById("new-game-name")
+				var name = textField.value;
+				textField.value = "";
+			
+				var game = new HousieGame(null, name);
+				window.GAME = game;
+				window.gameDB.put(game.toJSON());
+				render(game);
+				showGameWindow();
+				
+			} catch(e) {
+				alert("There was some error!!");
+				throw e;
+			}
+			
+			return false;
+		}
+
+		function showCreateWidget() {
+			document.getElementById("create-new-game-widget").className = ""
+			document.getElementById("game-window").className = "hidden"
+		}
+
+		function showGameWindow() {
+			document.getElementById("create-new-game-widget").className = "hidden"
+			document.getElementById("game-window").className = ""
+		}
+
+	</script>
+</footer>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
