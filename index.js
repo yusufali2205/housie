@@ -1,9 +1,10 @@
 class HousieGame {
-    constructor(id, name , drawn = []) {
-        this._id = id || Math.random().toString(36);
+    constructor(id, name , drawn = [], createdAt = new Date) {
+        this._id = id || window.randomId();
         this.name = name;
-        this._engine = new Random();
         this.drawn = drawn;
+        this.createdAt = createdAt;
+        this._engine = new Random();
 
         this._numbers = [];
 
@@ -31,44 +32,63 @@ class HousieGame {
         return this._numbers.length;
     }
 
+    createdAtReadable() {
+        if(this.createdAt instanceof Date) return this.createdAt.toLocaleString();
+        return "";
+    }
+
     toJSON() {
         return {
             _id: this._id,
             name: this.name,
-            drawn: this.drawn
+            drawn: this.drawn,
+            createdAt: this.createdAt
         }
     }
 }
 
-window.onload = function () {
+$(function () {
     var gameDB = new PouchDB("games")
     window.gameDB = gameDB;
-    var previousList = document.getElementById("previous-games-list");
+    var previousList = $("#previous-games-list");
 
     gameDB.allDocs().then(function(result) {
         result.rows.forEach(function(row) {
             gameDB.get(row.id).then(function(game) {
-                var p = document.createElement("p");
-                var a = document.createElement("a");
-                a.href = "#";
-                a.innerText = game.name;
-                a.setAttribute("data-id", game.id);
-                p.appendChild(a);
-                previousList.appendChild(p);
+                game = new HousieGame(row.id, game.name, game.drawn, new Date(game.createdAt));
+                var p = $("<li>");
+                var a = $("<a>");
+                var span = $("<span>");
+                a.attr("href", "#" + row.id).text(game.name);
+                span.text(" (" + game.createdAtReadable() + ")");
+                p.append(a);
+                p.append(span);
+                previousList.append(p);
 
-                a.onclick = function() {
+                a.on("click", function() {
                     window.load(row.id);
-                    return false;
-                }
+                });
             });
         });
     });
 
-}
+    var hash = window.location.hash.substring(1);
+    if(hash.length > 0) {
+        window.load(hash);
+    }
+
+    $("#delete-all-games").on("click", (e) => {
+       e.preventDefault();
+
+       if(!confirm("WARNING!!! \nAre you sure? This action is irreversible.")) return;
+
+       window.gameDB.destroy(() => window.location.reload());
+    });
+});
 
 function draw() {
     try {
-        var picked = window.GAME.draw();
+        window.GAME.draw();
         gameDB.get(window.GAME._id).then(function(game) {
             game.drawn = window.GAME.drawn;
             gameDB.put(game);
@@ -88,19 +108,22 @@ function load(id) {
             window.GAME = new HousieGame(gameDoc.id, game.name, game.drawn);
             render(window.GAME);
             showGameWindow();
+        }).catch(() => {
+            alert("Game not found!")
+            window.location.hash = "";
         });
     });
 }
 
 function render(game) {
-    document.getElementById("game-name").innerText = game.name;
-    var drawSequence = document.getElementById("draw-sequence");
-    drawSequence.innerHTML = "";
+    $("#game-name").text(game.name);
+    var drawSequence = $("#draw-sequence");
+    drawSequence.html("");
     game.drawn.forEach(function(num) {
-        document.getElementById("num-" + num).className = "drawn";
-        var historyElement = document.createElement("span");
-        historyElement.innerText = num + ", "
-        drawSequence.appendChild(historyElement);
+        $("#num-" + num).addClass("drawn");
+        var historyElement = $("<span>");
+        historyElement.text(num + ", ");
+        drawSequence.append(historyElement);
     });
 }
 
@@ -125,11 +148,17 @@ function createNewGame() {
 }
 
 function showCreateWidget() {
-    document.getElementById("create-new-game-widget").className = ""
-    document.getElementById("game-window").className = "hidden"
+    window.location.hash = "";
+    document.getElementById("create-new-game-widget").className = "";
+    document.getElementById("game-window").className = "hidden";
+    setTimeout(() => window.location.reload(), 100);
 }
 
 function showGameWindow() {
     document.getElementById("create-new-game-widget").className = "hidden"
     document.getElementById("game-window").className = ""
+}
+
+function randomId() {
+    return (Math.random() * Math.pow(10,16)).toString(36);
 }
