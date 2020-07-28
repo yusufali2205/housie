@@ -88,7 +88,7 @@ $(function () {
 
 function draw() {
     try {
-        window.GAME.draw();
+        var picked = window.GAME.draw();
         gameDB.get(window.GAME._id).then(function(game) {
             game.drawn = window.GAME.drawn;
             gameDB.put(game);
@@ -97,6 +97,7 @@ function draw() {
         alert(e);
     }
     render(window.GAME)
+    window.speaker().speak(picked);
 }
 
 function load(id) {
@@ -161,4 +162,37 @@ function showGameWindow() {
 
 function randomId() {
     return (Math.random() * Math.pow(10,16)).toString(36);
+}
+
+window.speaker = function (number) {
+    if(!window.SpeechSynthesisUtterance) return new NoopSpeaker();
+    return new ChromeSpeaker();
+}
+
+class ChromeSpeaker {
+    constructor() {
+        this.engine = new Random();
+        this.eligibleVoices = window.speechSynthesis
+            .getVoices()
+            .filter((v) => v.lang.toLowerCase().startsWith("en"));
+    }
+
+    speak(number) {
+        number = number.toString();
+        let msg = "";
+        if(number.length < 2) {
+            msg = "single number " + number;
+        } else {
+            msg = number.split("").join(" ");
+            msg += ", " + number;
+        }
+
+        var msgObj = new SpeechSynthesisUtterance(msg);
+        msgObj.voice = this.engine.pick(this.eligibleVoices);
+        window.speechSynthesis.speak(msgObj);
+    }
+}
+
+class NoopSpeaker {
+    speak(number) {}
 }
