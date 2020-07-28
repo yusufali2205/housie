@@ -1,0 +1,14 @@
+td, .number {
+    border: 1px solid;
+    padding: 20px;
+}
+
+.drawn {
+    background: lightgray;
+    border: 1px solid;
+    color: green;
+}
+
+.hidden {
+    display: none;
+}
