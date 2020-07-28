@@ -17,10 +17,10 @@ class HousieGame {
         if(this._numbers.length == 0) throw "Error: Game is complete!!!"
 
         var picked = this._engine.pick(this._numbers);
-        this.drawn.push(picked);
         this._numbers = this._numbers.filter(function (num) {
             return num != picked;
         });
+        this.drawn.push(picked);
         return picked;
     }
 
@@ -86,7 +86,7 @@ $(function () {
     });
 });
 
-function draw() {
+window.draw = $.throttle(2000, true, function() {
     try {
         var picked = window.GAME.draw();
         gameDB.get(window.GAME._id).then(function(game) {
@@ -98,7 +98,7 @@ function draw() {
     }
     render(window.GAME)
     window.speaker().speak(picked);
-}
+})
 
 function load(id) {
     window.gameDB.allDocs().then(function(result) {
@@ -121,11 +121,12 @@ function render(game) {
     var drawSequence = $("#draw-sequence");
     drawSequence.html("");
     game.drawn.forEach(function(num) {
-        $("#num-" + num).addClass("drawn");
+        $("#num-" + num).addClass("drawn").removeClass("last-drawn");
         var historyElement = $("<span>");
         historyElement.text(num + ", ");
         drawSequence.append(historyElement);
     });
+    $("#num-" + game.drawn[game.drawn.length - 1]).addClass("last-drawn")
 }
 
 function createNewGame() {
@@ -190,6 +191,10 @@ class ChromeSpeaker {
         var msgObj = new SpeechSynthesisUtterance(msg);
         msgObj.voice = this.engine.pick(this.eligibleVoices);
         window.speechSynthesis.speak(msgObj);
+    }
+
+    speakFn(number) {
+        return () => this.speak(number);
     }
 }
 

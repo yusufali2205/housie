@@ -12,3 +12,7 @@ td, .number {
 .hidden {
     display: none;
 }
+
+.last-drawn {
+    background-color: coral;
+}
