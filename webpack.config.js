@@ -1,6 +1,7 @@
 /* eslint no-undef: 0 */
 
 const HtmlWebPackPlugin = require("html-webpack-plugin");
+const path = require('path');
 
 module.exports = {
   module: {
@@ -27,5 +28,8 @@ module.exports = {
       template: "./src/index.html",
       filename: "./index.html"
     })
-  ]
+  ],
+  output: {
+    path: path.resolve(__dirname, 'docs'),
+  }
 };
