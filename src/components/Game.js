@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+
+import Button from 'react-bootstrap/Button';
+
 import Form from './Form';
 import GameList from './GamesList';
 import Board from './Board';
@@ -14,7 +17,7 @@ function Game() {
     setSelectedGame(gameName);
   };
 
-  const backButton = <button onClick={onBackButtonClick}>Back</button>;
+  const backButton = <Button variant="secondary" onClick={onBackButtonClick}>Back</Button>;
 
   let currentView;
 
@@ -36,9 +39,9 @@ function Game() {
   }
 
   return (
-    <React.Fragment>
+    <div style={{ margin: '20px' }}>
       {currentView}
-    </React.Fragment>
+    </div>
   );
 }
 

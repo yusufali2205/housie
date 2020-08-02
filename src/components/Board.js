@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import PropTypes from 'prop-types';
 
+import Button from 'react-bootstrap/Button';
+
 // import HousieGame from '../models/HousieGame';
 
 const propTypes = {
@@ -26,9 +28,9 @@ function Board({ name }) {
   return (
     <React.Fragment>
       <div>This is game board, {name}. Current number {currentNumber}</div>
-      <button onClick={draw}>
+      <Button variant="primary" onClick={draw}>
         Draw
-      </button>
+      </Button>
     </React.Fragment>
   );
 }

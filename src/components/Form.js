@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from 'prop-types';
+
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+
 // import PouchDB from 'pouchdb';
 // import HousieGame from '../models/HousieGame';
 import GameList from './GamesList';
@@ -8,7 +12,7 @@ const propTypes = {
   onFormSubmit: PropTypes.func.isRequired,
 }
 
-function Form({ onFormSubmit }) {
+function GameForm({ onFormSubmit }) {
   const [gameName, setGameName] = useState("");
 
   useEffect(() => {
@@ -80,24 +84,29 @@ function Form({ onFormSubmit }) {
   // TODO: add button, render Board on submit, store in DB
   return (
     <React.Fragment>
-      <input
-        type="text"
-        value={gameName}
-        name
-        required={true}
-        placeholder="Name of the Game!"
-        onChange={handleChange}
-      />
+      <Form inline>
+        <Form.Control
+          className="mb-2 mr-sm-2"
+          id="gameNameInput"
+          placeholder="Enter game name"
+          required={true}
+          value={gameName}
+          onChange={handleChange}
+        />
 
-      <button type="submit" value="Create new Game!" onClick={() => onFormSubmit(gameName)}>
-        Create New Game
-      </button>
+        <Button
+          className="mb-2"
+          onClick={() => onFormSubmit(gameName)}
+        >
+          Create New Game
+        </Button>
+      </Form>
 
       <GameList />
     </React.Fragment>
   );
 }
 
-Form.propTypes = propTypes;
+GameForm.propTypes = propTypes;
 
-export default Form;
+export default GameForm;
