@@ -1,6 +1,6 @@
 import React from "react";
-import Board from "./components/Board";
+import Game from "./components/Game";
 import ReactDOM from "react-dom";
 
 const wrapper = document.getElementById("container");
-wrapper ? ReactDOM.render(<Board />, wrapper) : false;
+wrapper ? ReactDOM.render(<Game />, wrapper) : false;
